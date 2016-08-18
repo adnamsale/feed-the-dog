@@ -1,0 +1,21 @@
+{
+  "name": "feed-the-dog",
+  "version": "0.0.1",
+  "description": "Simple passthru from Amazon IoT button to Zapier",
+  "main": "index.js",
+  "author": "adnamsale",
+  "license": "MIT",
+  "dependencies": {
+    "request": "^2.74.0"
+  },
+  "scripts": {
+    "setup": "node-lambda setup",
+    "run": "node-lambda run",
+    "deploy": "node-lambda deploy",
+    "package": "node-lambda package"
+  },
+  "devDependencies": {
+    "node-lambda": "*",
+    "aws-sdk": "^2.5.0"
+  }
+}
