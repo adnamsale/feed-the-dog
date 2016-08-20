@@ -4,6 +4,21 @@ var request = require("request");
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 exports.handler = function( event, context, callback ) {
+  var friendName = process.env.FRIEND_NAME;
+  
+  if (event.clickType === "DOUBLE") {
+    var message = friendName + ' says "Please buy me more food."'
+    request({
+        url: process.env.WEBHOOK_URL,
+        method: "POST",
+        json: true,
+        body: { message: message, event: event}
+    }, function (error, response, body){
+      callback(error, message);
+    });
+    return;
+  }
+  
   var updateParams = { TableName: "FeedTheDog",
     Key: { date: new Date().toDateString() },
     UpdateExpression: "ADD meals :incr",
@@ -17,7 +32,6 @@ exports.handler = function( event, context, callback ) {
     }
     else {
       var meals = data.Attributes.meals;
-      var friendName = process.env.FRIEND_NAME;
       var message = "";
       if (1 == meals) {
         message = "You've fed " + friendName + " once today.";
@@ -29,7 +43,7 @@ exports.handler = function( event, context, callback ) {
           url: process.env.WEBHOOK_URL,
           method: "POST",
           json: true,
-          body: { message: message}
+          body: { message: message, event: event}
       }, function (error, response, body){
         callback(error, message);
       });
